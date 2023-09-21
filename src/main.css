@@ -39,3 +39,7 @@ ul.navbar {
   display: grid;
   grid-template-columns: 1fr 3fr;
 }
+
+.validation-error {
+  color: red;
+}
