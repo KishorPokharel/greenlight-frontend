@@ -23,8 +23,9 @@ input[type='submit'] {
 }
 
 form div {
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
+
 form div label {
   display: block;
 }
@@ -42,4 +43,5 @@ ul.navbar {
 
 .validation-error {
   color: red;
+  font-size: 0.8rem;
 }

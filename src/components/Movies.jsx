@@ -6,7 +6,7 @@ const Movies = () => {
 
   return (
     <div>
-      <h1>Movies</h1>
+      <h2>Movies</h2>
       {movies &&
         movies.map((movie) => (
           <div key={movie.id}>

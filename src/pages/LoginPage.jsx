@@ -3,7 +3,7 @@ import React from 'react';
 const LoginPage = () => {
   return (
     <>
-      <h1>Login to your account</h1>
+      <h2>Login to your account</h2>
       <form action="">
         <div>
           <label htmlFor="email">Email</label>

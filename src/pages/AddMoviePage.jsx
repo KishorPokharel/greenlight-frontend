@@ -3,7 +3,7 @@ import React from 'react';
 const AddMoviePage = () => {
   return (
     <>
-      <h1>Add New Movie</h1>
+      <h2>Add New Movie</h2>
       <form action="">
         <div>
           <label htmlFor="title">Title</label>

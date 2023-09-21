@@ -1,17 +1,32 @@
-import React, { useRef } from 'react';
+import React from 'react';
+import { z } from 'zod';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const registerFormSchema = z.object({
+  name: z
+    .string({ required: true, required_error: 'Name is required' })
+    .min(2, 'Name must be atleast 2 characters')
+    .max(20, 'Name must be less than 20 characters'),
+  email: z
+    .string({ required: true, required_error: 'Email is required' })
+    .email('Invalid email'),
+  password: z.string().min(10, 'Password must be atleast 10 characters'),
+});
 
 const RegisterPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(registerFormSchema),
+  });
   const submitRegister = (data) => console.log(data);
 
   return (
     <>
-      <h1>Register for an account</h1>
+      <h2>Register for an account</h2>
       <form onSubmit={handleSubmit(submitRegister)}>
         <div>
           <label htmlFor="name">Name</label>
@@ -20,9 +35,9 @@ const RegisterPage = () => {
             id="name"
             {...register('name', { required: true })}
           />
-          {errors.name?.type === 'required' && (
+          {errors.name && (
             <p className="validation-error" role="alert">
-              Name is required
+              {errors.name?.message}
             </p>
           )}
         </div>
@@ -33,9 +48,9 @@ const RegisterPage = () => {
             id="email"
             {...register('email', { required: true })}
           />
-          {errors.email?.type === 'required' && (
+          {errors.email && (
             <p className="validation-error" role="alert">
-              Email is required
+              {errors.email?.message}
             </p>
           )}
         </div>
@@ -46,9 +61,9 @@ const RegisterPage = () => {
             id="password"
             {...register('password', { required: true })}
           />
-          {errors.password?.type === 'required' && (
+          {errors.password && (
             <p className="validation-error" role="alert">
-              Password is required
+              {errors.password?.message}
             </p>
           )}
         </div>
