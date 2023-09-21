@@ -4,7 +4,25 @@ const AddMoviePage = () => {
   return (
     <>
       <h1>Add New Movie</h1>
-      <form></form>
+      <form action="">
+        <div>
+          <label htmlFor="title">Title</label>
+          <input type="text" id="title" placeholder="A beautiful movie" />
+        </div>
+        <div>
+          <label htmlFor="year">Year</label>
+          <input type="text" id="year" placeholder="1982" />
+        </div>
+        <div>
+          <label htmlFor="runtime">Runtime in minutes</label>
+          <input type="runtime" id="runtime" placeholder="90 mins" />
+        </div>
+        <div>
+          <label htmlFor="genre">Genre</label>
+          <input type="genre" id="genre" placeholder="family,drama" />
+        </div>
+        <input type="submit" value="Add new movie" />
+      </form>
     </>
   );
 };
