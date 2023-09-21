@@ -1,0 +1,27 @@
+{
+  "metadata": {
+    "current_page": 1,
+    "page_size": 20,
+    "first_page": 1,
+    "last_page": 1,
+    "total_records": 2
+  },
+  "movies": [
+    {
+      "id": 1,
+      "title": "The Lion King",
+      "year": 1994,
+      "runtime": "88 mins",
+      "genres": ["musical", "family"],
+      "version": 1
+    },
+    {
+      "id": 2,
+      "title": "The Green Mile",
+      "year": 1999,
+      "runtime": "189 mins",
+      "genres": ["drama", "crime"],
+      "version": 1
+    }
+  ]
+}
