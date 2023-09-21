@@ -1,6 +1,7 @@
-import useMovies from './hooks/useMovies';
+import React from 'react';
+import useMovies from '../hooks/useMovies';
 
-function App() {
+const Movies = () => {
   const movies = useMovies();
 
   return (
@@ -21,6 +22,6 @@ function App() {
         ))}
     </div>
   );
-}
+};
 
-export default App;
+export default Movies;
