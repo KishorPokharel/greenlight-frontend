@@ -2,6 +2,9 @@ import React from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const registerFormSchema = z.object({
   name: z
@@ -14,6 +17,8 @@ const registerFormSchema = z.object({
   password: z.string().min(10, 'Password must be atleast 10 characters'),
 });
 
+const apiUrl = 'http://localhost:4000/v1';
+
 const RegisterPage = () => {
   const {
     register,
@@ -22,7 +27,30 @@ const RegisterPage = () => {
   } = useForm({
     resolver: zodResolver(registerFormSchema),
   });
-  const submitRegister = (data) => console.log(data);
+  const navigate = useNavigate();
+
+  const submitRegister = (data) => {
+    axios
+      .post(apiUrl + '/users', data, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .then((res) => {
+        navigate('/login');
+        toast.success('User registered. Please login');
+      })
+      .catch((err) => {
+        const { status } = err.response;
+        if (err.response) {
+          if (status >= 400 && status < 500) {
+            toast.error('server error');
+          }
+        } else if (err.request) {
+          toast.error('network error');
+        } else {
+          console.error(err);
+        }
+      });
+  };
 
   return (
     <>
