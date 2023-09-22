@@ -1,7 +1,10 @@
-import React from 'react';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+import ValidationErrors from '../components/ValidationErrors';
+import useSessionStore from '../store';
 import useAuth from '../hooks/useAuth';
 
 const loginFormSchema = z.object({
@@ -23,22 +26,30 @@ const LoginPage = () => {
     resolver: zodResolver(loginFormSchema),
   });
 
-  const { login } = useAuth();
+  const [badRequestErrors, setBadRequestErrors] = useState(null);
+  const setSessionToken = useSessionStore((s) => s.setToken);
+  const { login, saveSession } = useAuth();
+
+  const navigate = useNavigate();
 
   const submitLogin = (data) => {
     login(data)
       .then((res) => {
-        console.log(res.data);
-        // extract token from localstorage
+        const {
+          authentication_token: { token },
+        } = res.data;
+        console.log(token);
+        saveSession(token);
+        navigate('/');
       })
       .catch((err) => {
-        const { status } = err.response;
+        const { status, data } = err.response;
         if (err.response) {
           if (status >= 400 && status < 500) {
-            toast.error('server error');
+            setBadRequestErrors(data.error);
           }
         } else if (err.request) {
-          toast.error('network error');
+          toast.error('Network error');
         } else {
           console.error(err);
         }
@@ -47,6 +58,7 @@ const LoginPage = () => {
 
   return (
     <>
+      <ValidationErrors errors={badRequestErrors} />
       <h2>Login to your account</h2>
       <form onSubmit={handleSubmit(submitLogin)}>
         <div>

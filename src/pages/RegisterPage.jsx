@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import ValidationErrors from '../components/ValidationErrors';
 
 const registerFormSchema = z.object({
   name: z
@@ -27,6 +28,7 @@ const RegisterPage = () => {
   } = useForm({
     resolver: zodResolver(registerFormSchema),
   });
+  const [badRequestErrors, setBadRequestErrors] = useState(null);
 
   const navigate = useNavigate();
 
@@ -39,13 +41,13 @@ const RegisterPage = () => {
         toast.success('User registered. Please login');
       })
       .catch((err) => {
-        const { status } = err.response;
+        const { status, data } = err.response;
         if (err.response) {
           if (status >= 400 && status < 500) {
-            toast.error('server error');
+            setBadRequestErrors(data.error);
           }
         } else if (err.request) {
-          toast.error('network error');
+          toast.error('Network error');
         } else {
           console.error(err);
         }
@@ -54,6 +56,7 @@ const RegisterPage = () => {
 
   return (
     <>
+      <ValidationErrors errors={badRequestErrors} />
       <h2>Register for an account</h2>
       <form onSubmit={handleSubmit(submitRegister)}>
         <div>
