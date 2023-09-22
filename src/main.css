@@ -13,7 +13,8 @@ button {
   font-size: inherit;
 }
 
-input[type='submit'] {
+input[type='submit'],
+button {
   background-color: steelblue;
   color: white;
   padding: 0.4rem;
