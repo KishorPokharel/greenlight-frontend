@@ -6,17 +6,55 @@ import ErrorPage from './pages/ErrorPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import LoginPage from './pages/LoginPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import RequireLogout from './components/RequireLogout';
+
 const router = createBrowserRouter([
   {
     path: '/',
     errorElement: <ErrorPage />,
     element: <Layout />,
     children: [
-      { index: true, element: <HomePage /> },
-      { path: 'add-movie', element: <AddMoviePage /> },
-      { path: 'register', element: <RegisterPage /> },
-      { path: 'login', element: <LoginPage /> },
-      { path: 'profile', element: <ProfilePage /> },
+      {
+        index: true,
+        element: (
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'add-movie',
+        element: (
+          <ProtectedRoute>
+            <AddMoviePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'profile',
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'register',
+        element: (
+          <RequireLogout>
+            <RegisterPage />
+          </RequireLogout>
+        ),
+      },
+      {
+        path: 'login',
+        element: (
+          <RequireLogout>
+            <LoginPage />
+          </RequireLogout>
+        ),
+      },
     ],
   },
 ]);
