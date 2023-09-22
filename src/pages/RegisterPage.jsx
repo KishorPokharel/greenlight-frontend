@@ -2,9 +2,9 @@ import React from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import useAuth from '../hooks/useAuth';
 
 const registerFormSchema = z.object({
   name: z
@@ -14,26 +14,26 @@ const registerFormSchema = z.object({
   email: z
     .string({ required: true, required_error: 'Email is required' })
     .email('Invalid email'),
-  password: z.string().min(10, 'Password must be atleast 10 characters'),
+  password: z
+    .string({ required: true, required_error: 'Password is required' })
+    .min(10, 'Password must be atleast 10 characters'),
 });
-
-const apiUrl = 'http://localhost:4000/v1';
 
 const RegisterPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(registerFormSchema),
   });
+
   const navigate = useNavigate();
 
+  const { signup } = useAuth();
+
   const submitRegister = (data) => {
-    axios
-      .post(apiUrl + '/users', data, {
-        headers: { 'Content-Type': 'application/json' },
-      })
+    signup(data)
       .then((res) => {
         navigate('/login');
         toast.success('User registered. Please login');
@@ -58,11 +58,7 @@ const RegisterPage = () => {
       <form onSubmit={handleSubmit(submitRegister)}>
         <div>
           <label htmlFor="name">Name</label>
-          <input
-            type="text"
-            id="name"
-            {...register('name', { required: true })}
-          />
+          <input type="text" id="name" {...register('name')} />
           {errors.name && (
             <p className="validation-error" role="alert">
               {errors.name?.message}
@@ -71,11 +67,7 @@ const RegisterPage = () => {
         </div>
         <div>
           <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            {...register('email', { required: true })}
-          />
+          <input type="email" id="email" {...register('email')} />
           {errors.email && (
             <p className="validation-error" role="alert">
               {errors.email?.message}
