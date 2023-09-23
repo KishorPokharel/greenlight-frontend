@@ -4,17 +4,20 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import ValidationErrors from '../components/ValidationErrors';
-import useSessionStore from '../store';
 import useAuth from '../hooks/useAuth';
 
 const loginFormSchema = z.object({
   email: z
     .string({ required: true, required_error: 'Email is required' })
+    .trim()
+    .toLowerCase()
     .email('Invalid email'),
-  password: z.string({
-    required: true,
-    required_error: 'Password is required',
-  }),
+  password: z
+    .string({
+      required: true,
+      required_error: 'Password is required',
+    })
+    .trim(),
 });
 
 const LoginPage = () => {
@@ -27,7 +30,6 @@ const LoginPage = () => {
   });
 
   const [badRequestErrors, setBadRequestErrors] = useState(null);
-  const setSessionToken = useSessionStore((s) => s.setToken);
   const { login, saveSession } = useAuth();
 
   const navigate = useNavigate();
