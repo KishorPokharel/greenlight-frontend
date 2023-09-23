@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useMovies from '../hooks/useMovies';
 
 const Movies = () => {
-  const movies = useMovies();
+  const { getMovies } = useMovies();
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    getMovies()
+      .then((res) => setMovies(res.data.movies))
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
     <div>
