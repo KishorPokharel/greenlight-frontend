@@ -1,12 +1,15 @@
-import React from 'react';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { z } from 'zod';
+import useMovies from '../hooks/useMovies';
 
 const addMovieFormSchema = z.object({
   title: z.string().nonempty('Title is required').trim(),
   year: z
     .string()
+    .trim()
     .nonempty('Year is required')
     .pipe(
       z.coerce
@@ -20,7 +23,7 @@ const addMovieFormSchema = z.object({
     .trim()
     .regex(/^\d+$/, 'Runtime must be a number')
     .transform((val) => val + ' mins'),
-  genre: z
+  genres: z
     .string()
     .nonempty('Genre is required')
     .trim()
@@ -36,8 +39,15 @@ const AddMoviePage = () => {
     resolver: zodResolver(addMovieFormSchema),
   });
 
+  const navigate = useNavigate();
+  const { addMovie } = useMovies();
+
   const submitAddMovie = (data) => {
-    console.log(data);
+    addMovie(data)
+      .then((res) => {
+        navigate('/');
+      })
+      .catch((err) => console.error(err.response.data));
   };
 
   return (
@@ -61,7 +71,7 @@ const AddMoviePage = () => {
         <div>
           <label htmlFor="year">Year</label>
           <input
-            type="number"
+            type="text"
             id="year"
             placeholder="1982"
             {...register('year')}
@@ -89,14 +99,14 @@ const AddMoviePage = () => {
         <div>
           <label htmlFor="genre">Genre</label>
           <input
-            type="genre"
+            type="text"
             id="genre"
             placeholder="family,drama"
-            {...register('genre')}
+            {...register('genres')}
           />
-          {errors.genre && (
+          {errors.genres && (
             <p className="validation-error" role="alert">
-              {errors.genre?.message}
+              {errors.genres?.message}
             </p>
           )}
         </div>

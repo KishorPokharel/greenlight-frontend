@@ -26,13 +26,13 @@ const useAuth = () => {
 
   // saves to local storage and zustand store
   const saveSession = (token) => {
-    setToken(token); // from localstorage
-    setSessionToken(token); // from memory
+    setToken(token); // to localstorage
+    setSessionToken(token); // to memory
   };
 
   const loadSession = () => {
     const token = getToken(); // from localstorage
-    setSessionToken(token); // from memory
+    setSessionToken(token); // to memory
   };
 
   const isLoggedIn = () => {

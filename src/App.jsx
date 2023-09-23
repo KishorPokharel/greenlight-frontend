@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouterProvider } from 'react-router';
-import router from './routes';
 import useAuth from './hooks/useAuth';
+import router from './routes';
 
 const App = () => {
   const { loadSession } = useAuth();
